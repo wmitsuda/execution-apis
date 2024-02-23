@@ -1,0 +1,293 @@
+- name: ots_getApiLevel
+  summary: Returns a version number which indicates which Otterscan API level the node implements.
+  params: []
+  result:
+    name: Version
+    schema:
+      $ref: '#/components/schemas/bytes8'
+- name: ots_getInternalOperations
+  summary: Returns the internal ETH transfers inside a transaction.
+  params:
+    - name: Transaction hash
+      required: true
+      schema:
+        $ref: '#/components/schemas/hash32'
+  result:
+    name: List of operations
+    schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternalOperation'
+- name: ots_hasCode
+  summary: Check if a certain address contains a deployed bytecode.
+  description: |
+    A common way to check if an address is a contract or an EOA is calling `eth_getCode`
+    to see if it has some code deployed.
+
+    However this call is expensive regarding this purpose, as it returns the entire contract
+    code over the network just for the client to check its presence.
+
+    This call just returns a `boolean`.
+  params:
+    - name: Address
+      description: The ETH address to be checked.
+      required: true
+      schema:
+        $ref: '#/components/schemas/address'
+    - name: Block
+      required: true
+      schema:
+        $ref: '#/components/schemas/BlockNumberOrTagOrHash'
+  result:
+    name: Has code
+    description: indicates if the address contains a deployed bytecode or not
+    schema:
+      type: boolean
+- name: ots_getTransactionError
+  summary: Extracts a transaction raw error output
+  description: |
+    Given a transaction hash, returns its raw revert reason.
+
+    The returned byte blob should be ABI decoded in order to be presented to the user.
+
+    For instance, the most common error format is a string revert message;
+    in this case, it should be decoded using the `Error(string)` method selector, which
+    will allow you to extract the string message.
+
+    If it is not the case, it should probably be a solidity custom error, so you must
+    have the custom error ABI in order to decode it.
+  params:
+    - name: Transaction hash
+      required: true
+      schema:
+        $ref: '#/components/schemas/hash32'
+  result:
+    name: Transaction error
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_traceTransaction
+  summary: Extract all variations of calls, contract creation and self-destructs and returns a call tree.
+  params:
+    - name: Transaction hash
+      required: true
+      schema:
+        $ref: '#/components/schemas/hash32'
+  result:
+    name: Flattened call tree
+    schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/TraceEntry'
+- name: ots_getBlockDetails
+  summary: Tailor-made and expanded version of `eth_getBlock*` for block details page in Otterscan.
+  params:
+    - name: Block
+      required: true
+      schema:
+        $ref: '#/components/schemas/BlockNumberOrTag'
+  result:
+    name: Block information
+    schema:
+      oneOf:
+        - $ref: '#/components/schemas/notFound'
+        - $ref: '#/components/schemas/BlockDetails'
+- name: ots_getBlockDetailsByHash
+  summary: Same as `ots_getBlockDetails`, but it accepts a block hash as parameter.
+  params:
+    - name: Block hash
+      required: true
+      schema:
+        $ref: '#/components/schemas/hash32'
+  result:
+    name: Block information
+    schema:
+      oneOf:
+        - $ref: '#/components/schemas/notFound'
+        - $ref: '#/components/schemas/BlockDetails'
+- name: ots_getBlockTransactions
+  summary: Get paginated transactions for a certain block. Also remove some verbose fields like logs.
+  params:
+    - name: Block
+      required: true
+      schema:
+        $ref: '#/components/schemas/BlockNumberOrTag'
+    - name: Page number (0-based)
+      required: true
+      schema:
+        $ref: '#/components/schemas/uint'
+    - name: Page size
+      required: true
+      schema:
+        $ref: '#/components/schemas/uint'
+  result:
+    name: Transactions page
+    schema:
+      $ref: '#/components/schemas/TransactionPage'
+- name: ots_searchTransactionsBefore
+  summary: Searches backward in history for inbound/outbound transaction calls for a certain address.
+  description: |
+    This is an address history navigation method. It searches backward a certain point in time.
+
+    It is paginated, you **MUST** inform the page size. Some addresses like exchange addresses
+    or very popular DeFi contracts like Uniswap Router will return millions of results.
+
+    They return inbound (to), outbound (from) and "internal" transactions. By internal it means
+    that if a transaction calls a contract and somewhere in the call stack it sends ETH to the address
+    you are searching for or the address is a contract and it calls a method on it, the transaction is
+    matched and returned in the search results.
+
+    The transaction list is returned in **reverse order**.
+  params:
+    - name: Address
+      description: The ETH address to be searched
+      required: true
+      schema:
+        $ref: '#/components/schemas/address'
+    - name: Block number
+      description: |
+        It searches for occurrences of address before block number (exclusive). A value of 0 means you
+        want to search backwards from the chain tip.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uint'
+    - name: Page size
+      description: |
+        How many search results may be returned.
+
+        It may return less results than the page size if that is the case.
+        But it may return a little more than the page size if the last
+        matching block has more matches than it is required to fill out the page size.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uint'
+  result:
+    name: Transactions list
+    schema:
+      $ref: '#/components/schemas/TransactionsPageResult'
+  examples:
+    - name: vitalik.eth last page of transactions
+      params:
+        - name: Address
+          value: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+        - name: Block number
+          value: 0
+        - name: Page size
+          value: 25
+      result:
+        name: Transactions list
+        value:
+          txs: []
+          receipts: []
+          firstPage: true
+          lastPage: false
+- name: ots_searchTransactionsAfter
+  summary: Searches forward in history for inbound/outbound transaction calls for a certain address.
+  description: |
+    This is an address history navigation method. It searches forward a certain point in time.
+
+    It is paginated, you **MUST** inform the page size. Some addresses like exchange addresses
+    or very popular DeFi contracts like Uniswap Router will return millions of results.
+
+    They return inbound (to), outbound (from) and "internal" transactions. By internal it means
+    that if a transaction calls a contract and somewhere in the call stack it sends ETH to the address
+    you are searching for or the address is a contract and it calls a method on it, the transaction is
+    matched and returned in the search results.
+
+    The transaction list is returned in **reverse order**.
+  params:
+    - name: Address
+      description: The ETH address to be searched
+      required: true
+      schema:
+        $ref: '#/components/schemas/address'
+    - name: Block number
+      description: |
+        It searches for occurrences of address after block number (exclusive). A value of 0 means you
+        want to search forward from the genesis.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uint'
+    - name: Page size
+      description: |
+        How many search results may be returned.
+
+        It may return less results than the page size if that is the case.
+        But it may return a little more than the page size if the last
+        matching block has more matches than it is required to fill out the page size.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uint'
+  result:
+    name: Transactions list
+    schema:
+      $ref: '#/components/schemas/TransactionsPageResult'
+  examples:
+    - name: vitalik.eth first page of transactions
+      params:
+        - name: Address
+          value: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+        - name: Block number
+          value: 0
+        - name: Page size
+          value: 25
+      result:
+        name: Transactions list
+        value:
+          txs: []
+          receipts: []
+          firstPage: true
+          lastPage: false
+- name: ots_getTransactionBySenderAndNonce
+  summary: Gets the transaction hash for a certain sender address, given its nonce.
+  params:
+    - name: Sender address
+      required: true
+      schema:
+        $ref: '#/components/schemas/address'
+    - name: Transaction index
+      required: true
+      schema:
+        $ref: '#/components/schemas/uint64'
+  result:
+    name: Transaction hash
+    schema:
+      $ref: '#/components/schemas/hash32'
+- name: ots_getContractCreator
+  summary: Gets the transaction hash and the address who created a contract.
+  description: |
+    Given an ETH contract address, returns the tx hash and the direct address
+    who created the contract.
+
+    That means in case of factory contracts, the returned address is the factory,
+    not the origin EOA.
+
+    If the target address is an EOA or a destroyed contract, it returns `null`.
+  params:
+    - name: Address
+      summary: Address to be inspected
+      required: true
+      schema:
+        $ref: '#/components/schemas/address'
+  result:
+    name: Contract creator
+    schema:
+      oneOf:
+        - $ref: '#/components/schemas/notFound'
+        - $ref: '#/components/schemas/ContractCreator'
+  examples:
+    - name: Uniswap V3 Router on mainnet
+      params:
+        - name: Address
+          value: "0xE592427A0AEce92De3Edee1F18E0157C05861564"
+      result:
+        name: Contract creator
+        value:
+          hash: "0xe881c43cd88063e84a1d0283f41ee5348239b259c0d17a7e2e4552da3f4b2bc7"
+          creator: "0x6c9fc64a53c1b71fb3f9af64d1ae3a4931a5f4e9"
+    - name: vitalik.eth address (EOA)
+      params:
+        - name: Address
+          value: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+      result:
+        name: Contract creator
+        value: "null"

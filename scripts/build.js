@@ -42,6 +42,18 @@ methodFiles.forEach(file => {
   ];
 });
 
+methodsBase = "src/ots/";
+methodFiles = fs.readdirSync(methodsBase);
+methodFiles.forEach(file => {
+  console.log(file);
+  let raw = fs.readFileSync(methodsBase + file);
+  let parsed = yaml.load(raw);
+  methods = [
+    ...methods,
+    ...parsed,
+  ];
+});
+
 methodsBase = "src/engine/openrpc/methods/";
 methodFiles = fs.readdirSync(methodsBase);
 methodFiles.forEach(file => {

@@ -1,0 +1,431 @@
+SummarizedBlock:
+  title: The same as the canonical Block object, but with some data added/removed
+  type: object
+  required:
+    - hash
+    - parentHash
+    - sha3Uncles
+    - miner
+    - stateRoot
+    - transactionsRoot
+    - receiptsRoot
+    - logsBloom
+    - number
+    - gasLimit
+    - gasUsed
+    - timestamp
+    - extraData
+    - mixHash
+    - nonce
+    - size
+    - uncles
+  additionalProperties: false
+  properties:
+    hash:
+      title: Hash
+      $ref: '#/components/schemas/hash32'
+    parentHash:
+      title: Parent block hash
+      $ref: '#/components/schemas/hash32'
+    sha3Uncles:
+      title: Ommers hash
+      $ref: '#/components/schemas/hash32'
+    miner:
+      title: Coinbase
+      $ref: '#/components/schemas/address'
+    stateRoot:
+      title: State root
+      $ref: '#/components/schemas/hash32'
+    transactionsRoot:
+      title: Transactions root
+      $ref: '#/components/schemas/hash32'
+    receiptsRoot:
+      title: Receipts root
+      $ref: '#/components/schemas/hash32'
+    logsBloom:
+      title: Bloom filter
+      type: string
+    difficulty:
+      title: Difficulty
+      $ref: '#/components/schemas/uint'
+    number:
+      title: Number
+      $ref: '#/components/schemas/uint'
+    gasLimit:
+      title: Gas limit
+      $ref: '#/components/schemas/uint'
+    gasUsed:
+      title: Gas used
+      $ref: '#/components/schemas/uint'
+    timestamp:
+      title: Timestamp
+      $ref: '#/components/schemas/uint'
+    extraData:
+      title: Extra data
+      $ref: '#/components/schemas/bytes'
+    mixHash:
+      title: Mix hash
+      $ref: '#/components/schemas/hash32'
+    nonce:
+      title: Nonce
+      $ref: '#/components/schemas/bytes8'
+    totalDifficulty:
+      title: Total difficulty
+      $ref: '#/components/schemas/uint'
+    baseFeePerGas:
+      title: Base fee per gas
+      $ref: '#/components/schemas/uint'
+    withdrawalsRoot:
+      title: Withdrawals root
+      $ref: '#/components/schemas/hash32'
+    blobGasUsed:
+      title: Blob gas used
+      $ref: '#/components/schemas/uint'
+    excessBlobGas:
+      title: Excess blob gas
+      $ref: '#/components/schemas/uint'
+    parentBeaconBlockRoot:
+      title: Parent Beacon Block Root
+      $ref: '#/components/schemas/hash32'
+    size:
+      title: Block size
+      $ref: '#/components/schemas/uint'
+    transactionCount:
+      title: How many transactions exist inside the block
+      $ref: '#/components/schemas/uint'
+    withdrawals:
+      title: Withdrawals
+      type: array
+      items:
+        $ref: '#/components/schemas/Withdrawal'
+    uncles:
+      title: Uncles
+      type: array
+      items:
+        $ref: '#/components/schemas/hash32'
+SummarizedBlockWithTransactionPage:
+  title: The same as SummarizedBlockWithTransactionPage object, but with the transactions list added back, but in a pruned form
+  type: object
+  required:
+    - hash
+    - parentHash
+    - sha3Uncles
+    - miner
+    - stateRoot
+    - transactionsRoot
+    - receiptsRoot
+    - logsBloom
+    - number
+    - gasLimit
+    - gasUsed
+    - timestamp
+    - extraData
+    - mixHash
+    - nonce
+    - size
+    - transactions
+    - uncles
+  additionalProperties: false
+  properties:
+    hash:
+      title: Hash
+      $ref: '#/components/schemas/hash32'
+    parentHash:
+      title: Parent block hash
+      $ref: '#/components/schemas/hash32'
+    sha3Uncles:
+      title: Ommers hash
+      $ref: '#/components/schemas/hash32'
+    miner:
+      title: Coinbase
+      $ref: '#/components/schemas/address'
+    stateRoot:
+      title: State root
+      $ref: '#/components/schemas/hash32'
+    transactionsRoot:
+      title: Transactions root
+      $ref: '#/components/schemas/hash32'
+    receiptsRoot:
+      title: Receipts root
+      $ref: '#/components/schemas/hash32'
+    logsBloom:
+      title: Bloom filter
+      type: string
+    difficulty:
+      title: Difficulty
+      $ref: '#/components/schemas/uint'
+    number:
+      title: Number
+      $ref: '#/components/schemas/uint'
+    gasLimit:
+      title: Gas limit
+      $ref: '#/components/schemas/uint'
+    gasUsed:
+      title: Gas used
+      $ref: '#/components/schemas/uint'
+    timestamp:
+      title: Timestamp
+      $ref: '#/components/schemas/uint'
+    extraData:
+      title: Extra data
+      $ref: '#/components/schemas/bytes'
+    mixHash:
+      title: Mix hash
+      $ref: '#/components/schemas/hash32'
+    nonce:
+      title: Nonce
+      $ref: '#/components/schemas/bytes8'
+    totalDifficulty:
+      title: Total difficulty
+      $ref: '#/components/schemas/uint'
+    baseFeePerGas:
+      title: Base fee per gas
+      $ref: '#/components/schemas/uint'
+    withdrawalsRoot:
+      title: Withdrawals root
+      $ref: '#/components/schemas/hash32'
+    blobGasUsed:
+      title: Blob gas used
+      $ref: '#/components/schemas/uint'
+    excessBlobGas:
+      title: Excess blob gas
+      $ref: '#/components/schemas/uint'
+    parentBeaconBlockRoot:
+      title: Parent Beacon Block Root
+      $ref: '#/components/schemas/hash32'
+    size:
+      title: Block size
+      $ref: '#/components/schemas/uint'
+    transactionCount:
+      title: How many transactions exist inside the block
+      $ref: '#/components/schemas/uint'
+    transactions:
+      title: Full transactions (input field is cropped to 4bytes)
+      type: array
+      items:
+        $ref: '#/components/schemas/TransactionInfo'
+    withdrawals:
+      title: Withdrawals
+      type: array
+      items:
+        $ref: '#/components/schemas/Withdrawal'
+    uncles:
+      title: Uncles
+      type: array
+      items:
+        $ref: '#/components/schemas/hash32'
+BlockDetails:
+  type: object
+  title: Block details
+  additionalProperties: false
+  properties:
+    block:
+      title: Summarized block data
+      $ref: '#/components/schemas/SummarizedBlock'
+    issuance:
+      title: ETH issued in the block
+      type: object
+      properties:
+        blockReward:
+          title: amount of ETH rewarded in the block
+          $ref: '#/components/schemas/uint'
+        uncleReward:
+          title: amount of ETH reward in the block to uncle blocks
+          $ref: '#/components/schemas/uint'
+        issuance:
+          title: amount of ETH issued in the block
+          $ref: '#/components/schemas/uint'
+    totalFees:
+      title: amount of ETH paid in the block
+      $ref: '#/components/schemas/uint'
+TransactionPage:
+  title: Transaction page
+  type: object
+  required:
+    - fullblock
+    - receipts
+  additionalProperties: false
+  properties:
+    fullblock:
+      title: Block data
+      $ref: '#/components/schemas/SummarizedBlockWithTransactionPage'
+    receipts:
+      title: Receipts data
+      type: array
+      items:
+        $ref: '#/components/schemas/SummarizedReceiptInfo'
+SummarizedReceiptInfo:
+  title: Copy of ReceiptInfo without verbose fields
+  type: object
+  required:
+    - blockHash
+    - blockNumber
+    - from
+    - cumulativeGasUsed
+    - gasUsed
+    - transactionHash
+    - transactionIndex
+    - effectiveGasPrice
+  additionalProperties: false
+  properties:
+    type:
+      title: type
+      $ref: '#/components/schemas/byte'
+    transactionHash:
+      title: transaction hash
+      $ref: '#/components/schemas/hash32'
+    transactionIndex:
+      title: transaction index
+      $ref: '#/components/schemas/uint'
+    blockHash:
+      title: block hash
+      $ref: '#/components/schemas/hash32'
+    blockNumber:
+      title: block number
+      $ref: '#/components/schemas/uint'
+    from:
+      title: from
+      $ref: '#/components/schemas/address'
+    to:
+      title: to
+      description: Address of the receiver or null in a contract creation transaction.
+      oneOf:
+        - title: Contract Creation (null)
+          type: 'null'
+        - title: Recipient Address
+          $ref: '#/components/schemas/address'
+    cumulativeGasUsed:
+      title: cumulative gas used
+      description: The sum of gas used by this transaction and all preceding transactions in the same block.
+      $ref: '#/components/schemas/uint'
+    gasUsed:
+      title: gas used
+      description: The amount of gas used for this specific transaction alone.
+      $ref: '#/components/schemas/uint'
+    blobGasUsed:
+      title: blob gas used
+      description: The amount of blob gas used for this specific transaction. Only specified for blob transactions as defined by EIP-4844.
+      $ref: '#/components/schemas/uint'
+    contractAddress:
+      title: contract address
+      description: The contract address created, if the transaction was a contract creation, otherwise null.
+      oneOf:
+        - $ref: '#/components/schemas/address'
+        - name: Null
+          type: "null"
+    root:
+      title: state root
+      description: The post-transaction state root. Only specified for transactions included before the Byzantium upgrade.
+      $ref: '#/components/schemas/hash32'
+    status:
+      title: status
+      description: Either 1 (success) or 0 (failure). Only specified for transactions included after the Byzantium upgrade.
+      $ref: '#/components/schemas/uint'
+    effectiveGasPrice:
+      title: effective gas price
+      description: The actual value per gas deducted from the sender's account. Before EIP-1559, this is equal to the transaction's gas price. After, it is equal to baseFeePerGas + min(maxFeePerGas - baseFeePerGas, maxPriorityFeePerGas).
+      $ref: '#/components/schemas/uint'
+    blobGasPrice:
+      title: blob gas price
+      description: The actual value per gas deducted from the sender's account for blob gas. Only specified for blob transactions as defined by EIP-4844.
+      $ref: '#/components/schemas/uint'
+TransactionsPageResult:
+  title: Represents 1 page of results for transaction search methods
+  type: object
+  required:
+    - txs
+    - receipts
+    - firstPage
+    - lastPage
+  additionalProperties: false
+  properties:
+    txs:
+      title: list of transactions matching the search criteria
+      type: array
+      items:
+        $ref: '#/components/schemas/TransactionInfo'
+    receipts:
+      title: list of receipts matching the transaction list
+      type: array
+      items:
+        $ref: '#/components/schemas/ReceiptInfo'
+    firstPage:
+      title: indicates if this is the first page of results
+      type: boolean
+    lastPage:
+      title: indicates if this is the last page of results
+      type: boolean
+ContractCreator:
+  type: object
+  title: Contract creator
+  required:
+    - hash
+    - creator
+  additionalProperties: false
+  properties:
+    hash:
+      title: The hash of the transaction who created the contract
+      $ref: '#/components/schemas/hash32'
+    creator:
+      title: |
+        The address who directly created the contract.
+
+        Note that for simple transactions that directly deploy a contract
+        this corresponds to the EOA in the from field of the transaction.
+
+        For deployer contracts, i.e., the contract is created as a result
+        of a method call, this corresponds to the address of the contract
+        who created it.
+      $ref: '#/components/schemas/address'
+InternalOperation:
+  type: object
+  title: Internal operation
+  required:
+    - type
+    - from
+    - to
+    - value
+  additionalProperties: false
+  properties:
+    type:
+      title: type of operation
+      type: number
+    from:
+      title: sender of the operation
+      $ref: '#/components/schemas/address'
+    to:
+      title: target of the operation
+      $ref: '#/components/schemas/address'
+    value:
+      title: amount of ETH transferred
+      $ref: '#/components/schemas/uint'
+TraceEntry:
+  title: Trace entry
+  type: object
+  required:
+    - type
+    - depth
+    - from
+    - to
+    - value
+    - input
+  additionalProperties: false
+  properties:
+    type:
+      title: type of entry
+      type: string
+    depth:
+      title: depth level
+      type: number
+    from:
+      title: source of the operation
+      $ref: '#/components/schemas/address'
+    to:
+      title: target of the operation
+      $ref: '#/components/schemas/address'
+    value:
+      title: amount of ETH transferred
+      $ref: '#/components/schemas/uint'
+    input:
+      title: calldata of the operation
+      $ref: '#/components/schemas/bytes'

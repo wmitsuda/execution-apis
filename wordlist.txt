@@ -62,3 +62,9 @@ randao
 src
 https
 forkchoiceupdatedresponsev
+ots
+EOA
+txs
+ABI
+DeFi
+vitalik
