@@ -1,0 +1,7 @@
+- name: ots_getApiLevel
+  summary: Returns a version number which indicates which Otterscan API level the node implements.
+  params: []
+  result:
+    name: Version
+    schema:
+      $ref: '#/components/schemas/bytes8'
