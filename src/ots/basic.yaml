@@ -5,3 +5,91 @@
     name: Version
     schema:
       $ref: '#/components/schemas/bytes8'
+- name: ots_getTransactionError
+  summary: Returns the error result for a block transaction.
+  params:
+    - name: Transaction hash
+      required: true
+      schema:
+        $ref: '#/components/schemas/hash32'
+  result:
+    name: Transaction error
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_getInternalOperations
+  summary: Returns the internal ETH transfers inside a transaction.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_hasCode
+  summary: Check if a certain address contains a deployed code.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_getTransactionError
+  summary: Extract the transaction raw error output.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_traceTransaction
+  summary: Extract all variations of calls, contract creation and self-destructs and returns a call tree.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_getBlockDetails
+  summary: Tailor-made and expanded version of eth_getBlock* for block details page in Otterscan.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_getBlockDetailsByHash
+  summary: Same as ots_getBlockDetails, but it accepts a block hash as parameter.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_getBlockTransactions
+  summary: Get paginated transactions for a certain block. Also remove some verbose fields like logs.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_searchTransactionsBefore
+  summary: Gets paginated inbound/outbound transaction calls for a certain address.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_searchTransactionsAfter
+  summary: Gets paginated inbound/outbound transaction calls for a certain address.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_getTransactionBySenderAndNonce
+  summary: Gets the transaction hash for a certain sender address, given its nonce.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
+- name: ots_getContractCreator
+  summary: Gets the transaction hash and the address who created a contract.
+  params: []
+  result:
+    name: TODO
+    schema:
+      $ref: '#/components/schemas/bytes'
