@@ -81,11 +81,19 @@
       $ref: '#/components/schemas/bytes'
 - name: ots_getTransactionBySenderAndNonce
   summary: Gets the transaction hash for a certain sender address, given its nonce.
-  params: []
+  params:
+    - name: Sender address
+      required: true
+      schema:
+        $ref: '#/components/schemas/address'
+    - name: Transaction index
+      required: true
+      schema:
+        $ref: '#/components/schemas/uint64'
   result:
-    name: TODO
+    name: Transaction hash
     schema:
-      $ref: '#/components/schemas/bytes'
+      $ref: '#/components/schemas/hash32'
 - name: ots_getContractCreator
   summary: Gets the transaction hash and the address who created a contract.
   params: []
