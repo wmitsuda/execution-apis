@@ -96,8 +96,14 @@
       $ref: '#/components/schemas/hash32'
 - name: ots_getContractCreator
   summary: Gets the transaction hash and the address who created a contract.
-  params: []
+  params:
+    - name: Contract address
+      required: true
+      schema:
+        $ref: '#/components/schemas/address'
   result:
-    name: TODO
+    name: Contract creator
     schema:
-      $ref: '#/components/schemas/bytes'
+      oneOf:
+        - $ref: '#/components/schemas/notFound'
+        - $ref: '#/components/schemas/ContractCreator'

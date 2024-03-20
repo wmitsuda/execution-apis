@@ -1,0 +1,14 @@
+ContractCreator:
+  type: object
+  title: Contract creator
+  required:
+    - hash
+    - creator
+  additionalProperties: false
+  properties:
+    hash:
+      title: transaction hash who created the contract
+      $ref: '#/components/schemas/hash32'
+    creator:
+      title: The address who directly created the contract. Note that for simple transactions that directly deploy a contract this corresponds to the EOA in the from field of the transaction. For deployer contracts, i.e., the contract is created as a result of a method call, this corresponds to the address of the contract who created it.
+      $ref: '#/components/schemas/address'
